@@ -13,8 +13,12 @@ function findAllByUser(userId) {
     .all(userId);
 }
 
+function findById(id) {
+  return db.prepare(`SELECT id, user_id, description FROM emergy_data WHERE id = ?`).get(id);
+}
+
 function deleteById(id) {
   return db.prepare(`DELETE FROM emergy_data WHERE id = ?`).run(id);
 }
 
-module.exports = { create, findAllByUser, deleteById };
+module.exports = { create, findAllByUser, findById, deleteById };

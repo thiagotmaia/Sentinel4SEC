@@ -12,4 +12,15 @@ function findRecent(limit = 20) {
     .all(limit);
 }
 
-module.exports = { logAccess, findRecent };
+function countRecentFailedLogins(username, windowMinutes) {
+  const row = db
+    .prepare(
+      `SELECT COUNT(*) as count FROM access_logs
+       WHERE username_attempted = ? AND action = 'login_failed'
+       AND created_at >= datetime('now', ?)`
+    )
+    .get(username, `-${windowMinutes} minutes`);
+  return row.count;
+}
+
+module.exports = { logAccess, findRecent, countRecentFailedLogins };

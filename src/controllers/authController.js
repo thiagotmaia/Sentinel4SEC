@@ -1,13 +1,14 @@
 const authService = require("../services/authService");
+const { respondError } = require("../utils/errors");
 
 function register(req, res) {
-  const { username, password, role } = req.body || {};
+  const { username, password } = req.body || {};
 
   try {
-    const result = authService.register(username, password, role, req.ip);
+    const result = authService.register(username, password, req.ip);
     res.status(201).json(result);
   } catch (err) {
-    res.status(err.status || 500).json({ error: err.message });
+    respondError(res, err);
   }
 }
 
@@ -18,7 +19,7 @@ function login(req, res) {
     const result = authService.login(username, password, req.ip);
     res.json(result);
   } catch (err) {
-    res.status(err.status || 500).json({ error: err.message });
+    respondError(res, err);
   }
 }
 

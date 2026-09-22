@@ -29,15 +29,16 @@ function create(userId, description, value, unit, username, ip) {
 }
 
 function remove(id, username, ip) {
-  const info = emergyRepository.deleteById(id);
+  const record = emergyRepository.findById(id);
 
-  if (info.changes === 0) {
+  if (!record) {
     const error = new Error("Registro nao encontrado.");
     error.status = 404;
     throw error;
   }
 
-  logRepository.logAccess(username, ip, "emergy_data_deleted", `id=${id}`);
+  emergyRepository.deleteById(id);
+  logRepository.logAccess(username, ip, "emergy_data_deleted", `id=${id} owner_id=${record.user_id}`);
 }
 
 module.exports = { list, create, remove };

@@ -11,4 +11,8 @@ function findByUsername(username) {
   return db.prepare(`SELECT * FROM users WHERE username = ?`).get(username);
 }
 
-module.exports = { create, findByUsername };
+function findById(id) {
+  return db.prepare(`SELECT * FROM users WHERE id = ?`).get(id);
+}
+
+module.exports = { create, findByUsername, findById };
